@@ -17,6 +17,7 @@ import { idMixin, props as idProps } from '../../mixins/id'
 import { normalizeSlotMixin } from '../../mixins/normalize-slot'
 import { BButton } from '../button/button'
 import { sortKeys } from '../../utils/object'
+import infiniteScroll from 'vue-infinite-scroll'
 
 // --- Props ---
 
@@ -56,8 +57,15 @@ export const props = makePropsConfigurable(
 // @vue/component
 export const BDropdown = /*#__PURE__*/ Vue.extend({
   name: NAME_DROPDOWN,
+  directives: { infiniteScroll },
   mixins: [idMixin, dropdownMixin, normalizeSlotMixin],
-  props,
+  props: {
+    ...props,
+    infiniteScrollLoadNext: {
+      type: Function,
+      default: undefined
+    }
+  },
   computed: {
     dropdownClasses() {
       const { block, split } = this
@@ -183,6 +191,14 @@ export const BDropdown = /*#__PURE__*/ Vue.extend({
         on: {
           keydown: this.onKeydown // Handle UP, DOWN and ESC
         },
+        ...(this.infiniteScrollLoadNext && {
+          directives: [
+            {
+              name: 'infinite-scroll',
+              value: this.infiniteScrollLoadNext
+            }
+          ]
+        }),
         ref: 'menu'
       },
       [!this.lazy || visible ? this.normalizeSlot(SLOT_NAME_DEFAULT, { hide }) : h()]

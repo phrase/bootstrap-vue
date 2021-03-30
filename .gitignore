@@ -6,7 +6,6 @@
 coverage/
 dist/
 docs-dist/
-esm/
 node_modules/
 *.iml
 *.log
