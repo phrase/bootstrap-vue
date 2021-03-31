@@ -4,7 +4,6 @@
 .vercel/
 .vscode/
 coverage/
-dist/
 docs-dist/
 node_modules/
 *.iml
